@@ -1,6 +1,7 @@
 package fakers
 
 import (
+	"errors"
 	"image"
 	"image/draw"
 	"image/jpeg"
@@ -25,6 +26,7 @@ type Jpg struct {
 	Name       string
 	Extensions []string
 	Sizes      map[string]BlockSize
+	Quality    int
 }
 
 // Init Method
@@ -51,14 +53,17 @@ func (faker *Jpg) Fake(sourcePath string, destinationPath string, sourceInfo os.
 	height := imageInfo.Height
 	outImg := image.NewRGBA(image.Rect(0, 0, width, height))
 
-	blockSize, ok := faker.Sizes[string(width)+"x"+string(height)]
-	if !ok {
-		blockSize = BlockSize{imageInfo.BlockWidth, imageInfo.BlockHeight}
-		faker.Sizes[string(width)+"x"+string(height)] = blockSize
-	}
-
 	for i := 0; i < len(imageInfo.PixelInfo); i++ {
-		draw.Draw(outImg, imageInfo.PixelInfo[i].Rectangle, &image.Uniform{imageInfo.PixelInfo[i].Color}, image.ZP, draw.Src)
+		pixelInfo, err := imageProcessor.ExtractRectangleInfo(imageInfo.PixelInfo[i])
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+		colorInfo, err := imageProcessor.ParseHexColorFast("#" + pixelInfo.Color)
+		if err != nil {
+			return err
+		}
+		draw.Draw(outImg, pixelInfo.Rectangle, &image.Uniform{colorInfo}, image.ZP, draw.Src)
 	}
 
 	destinationImage, err := os.Create(destinationPath)
@@ -66,10 +71,43 @@ func (faker *Jpg) Fake(sourcePath string, destinationPath string, sourceInfo os.
 		return err
 	}
 
-	err = jpeg.Encode(destinationImage, outImg, &jpeg.Options{Quality: 90})
+	err = jpeg.Encode(destinationImage, outImg, &jpeg.Options{Quality: faker.Quality})
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+// FakeTreeFile Command
+func (faker *Jpg) FakeTreeFile(item extpoints.TreeFile, destinationPath string) error {
+	log.Info(item.Path, " - faked with JPG")
+	width := item.ImageInfo.Width
+	height := item.ImageInfo.Height
+	outImg := image.NewRGBA(image.Rect(0, 0, width, height))
+	imageProcessor := mediaFakerProcessors.ImageProcessor{}
+	rectangles, err := imageProcessor.ExtractPixelInfo(item.ImageInfo.PixelInfo)
+	if err != nil {
+		return errors.New("Pixel Information could not be extracted correctly")
+	}
+	for i := 0; i < len(rectangles); i++ {
+		rectangle := rectangles[i].Rectangle
+		colorInfo, err := imageProcessor.ParseHexColorFast("#" + rectangles[i].Color)
+		if err != nil {
+			return errors.New("Pixel color information is incorrect")
+		}
+		draw.Draw(outImg, rectangle, &image.Uniform{colorInfo}, image.ZP, draw.Src)
+	}
+
+	destinationImage, err := os.Create(destinationPath)
+	if err != nil {
+		return err
+	}
+
+	err = jpeg.Encode(destinationImage, outImg, &jpeg.Options{Quality: 65})
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -40,9 +40,9 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	RootCmd.PersistentFlags().StringVarP(&DestinationPath, "destination", "d", "", "Destination Directory path where mediafaker should store the files")
+	RootCmd.PersistentFlags().StringVarP(&DestinationPath, "destination", "d", "", "Local Destination directory path where mediafaker should store the files")
 	RootCmd.PersistentFlags().StringSliceVarP(&ExtensionsToCopyAutomatically, "extcopy", "e", []string{}, "List of extensions that should be copied automatically")
-	RootCmd.PersistentFlags().Int64VarP(&MaximumSizeForCopy, "maxcopy", "m", 300000, "Maximum Size a file should have to be copied")
+	RootCmd.PersistentFlags().Int64VarP(&MaximumSizeForCopy, "maxcopy", "m", 30000, "Maximum Size(in bytes) a file should have to be copied automatically if it cannot be faked")
 	RootCmd.PersistentFlags().BoolVarP(&jsonlog, "jsonlog", "j", false, "Change logger format to json")
 }
 
@@ -51,5 +51,9 @@ func initConfig() {
 	myFigure.Print()
 	fmt.Println("")
 
-	log.SetOutput(os.Stdout)
+	if jsonlog {
+		log.SetFormatter(&log.JSONFormatter{})
+	} else {
+		log.SetOutput(os.Stdout)
+	}
 }
