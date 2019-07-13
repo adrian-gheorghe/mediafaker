@@ -5,27 +5,27 @@ RELEASE_URL=$(curl -Ls -o /dev/null -w %{url_effective} https://github.com/adria
 # Extract tag after the last forward slash
 TAG="${RELEASE_URL##*/}"
 
-# Check if moni is currently installed
-LOCAL_PATH=$(which moni)
+# Check if mediafaker is currently installed
+LOCAL_PATH=$(which mediafaker)
  if [ -x "$LOCAL_PATH" ]; then
-    echo "Moni is already Installed"
-    echo "Try running $(moni --help)"
+    echo "Mediafaker is already Installed"
+    echo "Try running $(mediafaker --help)"
     exit 0
 fi
 
-echo "Attempting to download moni v${TAG}"
+echo "Attempting to download mediafaker v${TAG}"
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    BINARY_PATH="moni-linux"
+    BINARY_PATH="mediafaker-linux"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-    BINARY_PATH="moni-darwin"
+    BINARY_PATH="mediafaker-darwin"
 else
-    BINARY_PATH="moni"
+    BINARY_PATH="mediafaker"
 fi
 
 curl -L "https://github.com/adrian-gheorghe/mediafaker/releases/download/$TAG/$BINARY_PATH" --output $BINARY_PATH
 chmod +x $BINARY_PATH
-mv $BINARY_PATH /usr/local/bin/moni
+mv $BINARY_PATH /usr/local/bin/mediafaker
 
-echo "Moni installed successfully!"
-moni --help
+echo "Mediafaker installed successfully!"
+mediafaker --help
