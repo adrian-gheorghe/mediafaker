@@ -24,15 +24,27 @@ Flags:
   -e, --extcopy strings      List of extensions that should be copied automatically
   -h, --help                 help for mediafaker
   -j, --jsonlog              Change logger format to json
-  -m, --maxcopy int          Maximum Size a file should have to be copied automatically (default 300000)
+  -m, --maxcopy int          Maximum Size(in bytes) a file should have to be copied automatically if it cannot be faked (default 30000)
       --version              version for mediafaker
 
 Use "mediafaker [command] --help" for more information about a command.
 ```
-# Usage
-mediafaker can be used in 2 ways.
 
-## local
+## Installation
+```bash
+wget -O https://raw.githubusercontent.com/adrian-gheorghe/mediafaker/master/install.sh | bash
+```
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/adrian-gheorghe/mediafaker/master/install.sh)"
+```
+
+## Download
+Download latest from the releases page: https://github.com/adrian-gheorghe/mediafaker/releases.
+
+# Usage
+mediafaker can be used in 2 ways, to either fake a local path or a remote url / ssh path.
+
+## Local
 The simplest way is when the path you want to fake is on the same host as the destination path. Then you can run mediafaker local
 
 ```sh
@@ -40,7 +52,7 @@ mediafaker local \
     --source="/opt/media" \
     --destination="/home/project/public/fake/destination"
 ```
-## remote
+## Remote
 When the source and destination paths are on different hosts mediafaker uses https://github.com/adrian-gheorghe/moni in order to generate a json representation of the directory you want to fake.
 
 ```json
@@ -120,13 +132,13 @@ When the source and destination paths are on different hosts mediafaker uses htt
 ]
 ```
 
-### url
+### URL
 You can use moni https://github.com/adrian-gheorghe/moni or any other tool to generate a json output of the following form. mediafaker can use this to generate a fake version of the tree in your desired source.
 
 ```bash
 moni url \
     --source="http://example.org/path/to/moni.output.json" \
-    --destination="/home/project/public/fake/destination" \
+    --destination="/home/project/public/fake/destination"
 ```
 
 This flow can easily be automated to give you access to a fresh abstracted version of the tree on demand. 
@@ -134,7 +146,7 @@ You can get moni to run on your server periodically and create a new version of 
 
 You can run mediafaker locally or on your dev/stage environments in order to have an up to date faked version of the public assets in production.
 
-### ssh
+### SSH
 mediafaker has a ssh client built in. When calling the ssh command, mediafaker attempts to:
 - connect to your remote host using the credentials provided
 - download moni from github
