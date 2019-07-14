@@ -42,6 +42,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/adrian-gheorghe/mediafaker
 Download latest from the releases page: https://github.com/adrian-gheorghe/mediafaker/releases.
 
 # Usage
+
 mediafaker can be used in 2 ways, to either fake a local path or a remote url / ssh path.
 
 ## Local
@@ -52,6 +53,7 @@ mediafaker local \
     --source="/opt/media" \
     --destination="/home/project/public/fake/destination"
 ```
+
 ## Remote
 When the source and destination paths are on different hosts mediafaker uses https://github.com/adrian-gheorghe/moni in order to generate a json representation of the directory you want to fake.
 
@@ -167,7 +169,14 @@ mediafaker ssh \
 ## Image Pixelation
 One of the main features of mediafaker is that it will read image files and create a pixelated version of the original image keeping the same dimensions and main colors. This saves time and precious disk space while also allowing you to have a drop in replacement for your images
 
-filefaker will proceed to create an exact replica of the source directory, by creating mock files. The mock files created try to follow the originals as much as possible.
+mediafaker will proceed to create an exact replica of the source directory, by creating mock files. The mock files created try to follow the originals as much as possible.
+
+#### Magento Luma Sample Data 1
+![MediaFaker 1](demo/mediafaker2.jpg) 
+#### Magento Luma Sample Data 2
+![MediaFaker 1](demo/mediafaker3.jpg) 
+#### Magento Luma Original
+![MediaFaker 1](demo/mediafaker1.jpg) 
 
 ## Documents
 - Xlsx support added using the https://github.com/tealeg/xlsx package 
