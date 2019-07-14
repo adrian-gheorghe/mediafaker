@@ -80,7 +80,7 @@ func (mediaFake *MediaFake) FakeItem(sourcePath string, destinationPath string, 
 	} else if sourceInfo.Mode()&os.ModeSymlink != 0 {
 		return mediaFake.FakeLink(sourcePath, destinationPath, sourceInfo)
 	}
-	return mediaFake.FakeFile(sourcePath, strings.ToLower(destinationPath), sourceInfo)
+	return mediaFake.FakeFile(sourcePath, destinationPath, sourceInfo)
 }
 
 /**
