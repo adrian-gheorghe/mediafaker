@@ -103,7 +103,7 @@ func (faker *Jpg) FakeTreeFile(item extpoints.TreeFile, destinationPath string) 
 		return err
 	}
 
-	err = jpeg.Encode(destinationImage, outImg, &jpeg.Options{Quality: 65})
+	err = jpeg.Encode(destinationImage, outImg, &jpeg.Options{Quality: 84})
 	if err != nil {
 		return err
 	}
