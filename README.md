@@ -136,7 +136,7 @@ When the source and destination paths are on different hosts mediafaker uses htt
 You can use moni https://github.com/adrian-gheorghe/moni or any other tool to generate a json output of the following form. mediafaker can use this to generate a fake version of the tree in your desired source.
 
 ```bash
-moni url \
+mediafaker url \
     --source="http://example.org/path/to/moni.output.json" \
     --destination="/home/project/public/fake/destination"
 ```
