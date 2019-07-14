@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var AppVersion = "0.1.2"
+var AppVersion = "0.1.3"
 
 var RootCmd = &cobra.Command{
 	Use:     "mediafaker",
